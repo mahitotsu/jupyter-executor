@@ -1,2 +1,6 @@
+import os
+from nbconvert.nbconvertapp import NbConvertApp
+
 def lambda_handler (event, context):
-    return None
+    app = NbConvertApp()
+    return app
