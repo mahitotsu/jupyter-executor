@@ -10,6 +10,7 @@ RUN apt install -y python3 python3-pip jupyter python3-nbconvert &&\
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
 RUN pip install --target ${FUNCTION_DIR} awslambdaric
+COPY ./modules/ ./modules/
 COPY ./notebooks/ ./notebooks/
 COPY app.py ./
 
