@@ -1,16 +1,16 @@
 ARG FUNCTION_DIR=/functions
 
-FROM public.ecr.aws/docker/library/python:3.11-slim-bullseye
+FROM public.ecr.aws/debian/debian:stable-slim
 ARG FUNCTION_DIR
 
 RUN apt update -y && apt upgrade -y
 RUN mkdir -p ${FUNCTION_DIR}
 
-RUN pip install --target ${FUNCTION_DIR} awslambdaric
-RUN pip install nbconvert && apt install -y pandoc &&\
+RUN apt install -y python3 python3-pip python3-nbconvert &&\
     apt clean && rm -rf /var/lib/apt/lists/*
-COPY app.py ${FUNCTION_DIR}
+RUN pip install --target ${FUNCTION_DIR} jupyter awslambdaric
+COPY app.py hello.ipynb ${FUNCTION_DIR}
 
 WORKDIR ${FUNCTION_DIR}
-ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
+ENTRYPOINT [ "/usr/bin/python3", "-m", "awslambdaric" ]
 CMD [ "app.lambda_handler" ]

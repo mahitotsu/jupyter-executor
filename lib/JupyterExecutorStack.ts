@@ -1,4 +1,4 @@
-import { CfnOutput, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { DockerImageCode, DockerImageFunction, FunctionUrlAuthType, InvokeMode } from "aws-cdk-lib/aws-lambda";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
@@ -9,6 +9,8 @@ export class JupyterExecutorStack extends Stack {
 
         const executor = new DockerImageFunction(this, 'Function', {
             code: DockerImageCode.fromImageAsset(`${__dirname}/../assets`),
+            memorySize: 512,
+            timeout: Duration.seconds(30),
         });
         new LogGroup(executor, 'LogGroup', {
             logGroupName: `/aws/lambda/${executor.functionName}`,
